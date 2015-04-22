@@ -1,20 +1,20 @@
 {
-    "name": "jobbrander/jobs-indeed",
+    "name": "jobbrander/jobs-simplyhired",
     "type": "library",
-    "description": "Making it simple to integrate your application with Indeed Jobs API.",
+    "description": "Making it simple to integrate your application with SimplyHired Jobs API.",
     "keywords": [
         "jobs",
         "api client",
         "object",
-        "indeed"
+        "simplyhired"
     ],
-    "homepage": "https://github.com/JobBrander/jobs-indeed",
+    "homepage": "https://github.com/JobBrander/jobs-simplyhired",
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "Steven Maguire",
-            "email": "stevenmaguire@gmail.com",
-            "homepage": "https://github.com/stevenmaguire"
+            "name": "Karl Hughes",
+            "email": "khughes.me@gmail.com",
+            "homepage": "https://github.com/karllhughes"
         }
     ],
     "require": {

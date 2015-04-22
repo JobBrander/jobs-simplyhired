@@ -1,18 +1,16 @@
 <?php namespace JobBrander\Jobs\Client\Providers\Test;
 
-use JobBrander\Jobs\Client\Providers\Indeed;
+use JobBrander\Jobs\Client\Providers\Simplyhired;
 use Mockery as m;
 
-class IndeedTest extends \PHPUnit_Framework_TestCase
+class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->params = [
-            'publisherId' => '3806336598146294',
-            'version' => 2,
-            'highlight' => 0,
+            'developerKey' => '17a4c65cdfe9ad0e4dd622fe6612df0fc2cadb3c.101238'
         ];
-        $this->client = new Indeed($this->params);
+        $this->client = new Simplyhired($this->params);
     }
 
     public function testItWillUseJsonFormat()
@@ -28,7 +26,7 @@ class IndeedTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('GET', $verb);
     }
-
+/*
     public function testListingPath()
     {
         $path = $this->client->getListingsPath();
@@ -217,4 +215,5 @@ class IndeedTest extends \PHPUnit_Framework_TestCase
 
         $results = $this->client->getJobs();
     }
+*/
 }
