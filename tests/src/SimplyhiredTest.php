@@ -26,12 +26,12 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('GET', $verb);
     }
-/*
+
     public function testListingPath()
     {
         $path = $this->client->getListingsPath();
 
-        $this->assertEquals('results', $path);
+        $this->assertEquals('jobs', $path);
     }
 
     public function testItWillProvideEmptyParameters()
@@ -42,28 +42,10 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($parameters));
     }
 
-    public function testUrlIncludesHighlightWhenProvided()
-    {
-        $param = 'highlight='.$this->params['highlight'];
-
-        $url = $this->client->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
-    public function testUrlNotIncludesHighlightWhenNotProvided()
-    {
-        $param = 'highlight=';
-
-        $url = $this->client->setHighlight(null)->getUrl();
-
-        $this->assertNotContains($param, $url);
-    }
-
     public function testUrlIncludesKeywordWhenProvided()
     {
         $keyword = uniqid().' '.uniqid();
-        $param = 'q='.urlencode($keyword);
+        $param = 'q-'.urlencode($keyword);
 
         $url = $this->client->setKeyword($keyword)->getUrl();
 
@@ -72,7 +54,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlNotIncludesKeywordWhenNotProvided()
     {
-        $param = 'q=';
+        $param = 'q-';
 
         $url = $this->client->getUrl();
 
@@ -83,7 +65,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     {
         $city = uniqid();
         $state = uniqid();
-        $param = 'l='.urlencode($city.', '.$state);
+        $param = 'l-'.urlencode($city.', '.$state);
 
         $url = $this->client->setCity($city)->setState($state)->getUrl();
 
@@ -93,7 +75,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     public function testUrlIncludesLocationWhenCityProvided()
     {
         $city = uniqid();
-        $param = 'l='.urlencode($city);
+        $param = 'l-'.urlencode($city);
 
         $url = $this->client->setCity($city)->getUrl();
 
@@ -103,7 +85,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     public function testUrlIncludesLocationWhenStateProvided()
     {
         $state = uniqid();
-        $param = 'l='.urlencode($state);
+        $param = 'l-'.urlencode($state);
 
         $url = $this->client->setState($state)->getUrl();
 
@@ -112,91 +94,149 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlNotIncludesLocationWhenNotProvided()
     {
-        $param = 'l=';
+        $param = 'l-';
 
         $url = $this->client->getUrl();
 
         $this->assertNotContains($param, $url);
     }
 
-    public function testUrlIncludesLimitWhenProvided()
+    public function testUrlIncludesCountWhenProvided()
     {
-        $limit = uniqid();
-        $param = 'limit='.$limit;
+        $count = uniqid();
+        $param = 'ws-'.$count;
 
-        $url = $this->client->setCount($limit)->getUrl();
+        $url = $this->client->setCount($count)->getUrl();
 
         $this->assertContains($param, $url);
     }
 
-    public function testUrlNotIncludesLimitWhenNotProvided()
+    public function testUrlNotIncludesCountWhenNotProvided()
     {
-        $param = 'limit=';
+        $param = 'ws-';
 
         $url = $this->client->setCount(null)->getUrl();
 
         $this->assertNotContains($param, $url);
     }
 
-    public function testUrlIncludesPublisherWhenProvided()
+    public function testUrlIncludesDeveloperKeyWhenProvided()
     {
-        $param = 'publisher='.$this->params['publisherId'];
+        $param = 'auth='.$this->params['developerKey'];
 
         $url = $this->client->getUrl();
 
         $this->assertContains($param, $url);
     }
 
-    public function testUrlNotIncludesPublisherWhenNotProvided()
+    public function testUrlNotIncludesDeveloperKeyWhenNotProvided()
     {
-        $param = 'publisher=';
+        $param = 'auth=';
 
-        $url = $this->client->setPublisherId(null)->getUrl();
+        $url = $this->client->setDeveloperKey(null)->getUrl();
 
         $this->assertNotContains($param, $url);
     }
 
-    public function testUrlIncludesStartWhenProvided()
+    public function testUrlIncludesPageWhenProvided()
     {
         $page = uniqid();
-        $param = 'start='.$page;
+        $param = 'pn-'.$page;
 
         $url = $this->client->setPage($page)->getUrl();
 
         $this->assertContains($param, $url);
     }
 
-    public function testUrlNotIncludesStartWhenNotProvided()
+    public function testUrlNotIncludesPageWhenNotProvided()
     {
-        $param = 'start=';
+        $param = 'pn-';
 
         $url = $this->client->setPage(null)->getUrl();
 
         $this->assertNotContains($param, $url);
     }
 
-    public function testUrlIncludesVersionWhenProvided()
+    public function testUrlIncludesIpWhenProvided()
     {
-        $param = 'v='.$this->params['version'];
+        $ip = uniqid();
+        $param = 'clip='.$ip;
 
-        $url = $this->client->getUrl();
+        $url = $this->client->setIpAddress($ip)->getUrl();
 
         $this->assertContains($param, $url);
     }
 
-    public function testUrlNotIncludesVersionWhenNotProvided()
+    public function testUrlIncludesIpWhenNotProvided()
     {
-        $param = 'v=';
+        $param = 'clip=';
 
-        $url = $this->client->setVersion(null)->getUrl();
+        $url = $this->client->setIpAddress(null)->getUrl();
 
-        $this->assertNotContains($param, $url);
+        $this->assertContains($param, $url);
+    }
+
+    public function testUrlIncludesSearchStyleWhenProvided()
+    {
+        $ssty = uniqid();
+        $param = 'ssty='.$ssty;
+
+        $url = $this->client->setSearchStyle($ssty)->getUrl();
+
+        $this->assertContains($param, $url);
+    }
+
+    public function testUrlIncludesSearchStyleWhenNotProvided()
+    {
+        $param = 'ssty=';
+
+        $url = $this->client->setSearchStyle(null)->getUrl();
+
+        $this->assertContains($param, $url);
+    }
+
+    public function testUrlIncludesConfigFlagWhenProvided()
+    {
+        $cflg = uniqid();
+        $param = 'cflg='.$cflg;
+
+        $url = $this->client->setConfigFlag($cflg)->getUrl();
+
+        $this->assertContains($param, $url);
+    }
+
+    public function testUrlIncludesConfigFlagWhenNotProvided()
+    {
+        $param = 'cflg=';
+
+        $url = $this->client->setConfigFlag(null)->getUrl();
+
+        $this->assertContains($param, $url);
+    }
+
+    public function testUrlIncludesDescriptionFragWhenProvided()
+    {
+        $frag = uniqid();
+        $param = 'frag='.$frag;
+
+        $url = $this->client->setDescriptionFrag($frag)->getUrl();
+
+        $this->assertContains($param, $url);
+    }
+
+    public function testUrlIncludesDescriptionFragWhenNotProvided()
+    {
+        $param = 'frag=';
+
+        $url = $this->client->setDescriptionFrag(null)->getUrl();
+
+        $this->assertContains($param, $url);
     }
 
     public function testItCanConnect()
     {
-        $listings = ['results' => [
-            ['jobtitle' => uniqid(), 'company' => uniqid()],
+        $listings = ['jobs' => [
+            ['title' => uniqid(), 'company' => uniqid()],
         ]];
 
         $this->client->setKeyword('project manager')
@@ -215,5 +255,4 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
         $results = $this->client->getJobs();
     }
-*/
 }

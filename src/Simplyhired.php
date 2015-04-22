@@ -213,7 +213,7 @@ class Simplyhired extends AbstractProvider
         array_walk($url_params, function ($value, $key) use (&$url_string, &$sep) {
             $computed_value = $this->$value();
             if (!is_null($computed_value)) {
-                $url_string .= $sep . $key . '-' . $computed_value;
+                $url_string .= $sep . $key . '-' . urlencode($computed_value);
                 $sep = '/';
             }
         });
