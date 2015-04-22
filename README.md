@@ -47,13 +47,11 @@ $ ./vendor/bin/phpunit
 
 Please see [CONTRIBUTING](https://github.com/jobbrander/jobs-simplyhired/blob/master/CONTRIBUTING.md) for details.
 
-
 ## Credits
 
 - [Karl Hughes](https://github.com/karllhughes)
 - [Steven Maguire](https://github.com/stevenmaguire)
 - [All Contributors](https://github.com/jobbrander/jobs-simplyhired/contributors)
-
 
 ## License
 
