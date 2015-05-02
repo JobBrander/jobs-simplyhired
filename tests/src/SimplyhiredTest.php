@@ -235,11 +235,12 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanConnect()
     {
-        $listings = ['jobs' => [
-            ['title' => uniqid(), 'company' => uniqid()],
-        ]];
+        $job_count = rand(2,10);
+        $listings = ['jobs' => $this->createJobArray($job_count)];
+        $source = $this->client->getSource();
+        $keyword = 'project manager';
 
-        $this->client->setKeyword('project manager')
+        $this->client->setKeyword($keyword)
             ->setCity('Chicago')
             ->setState('IL');
 
@@ -254,5 +255,33 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $this->client->setClient($http);
 
         $results = $this->client->getJobs();
+
+        foreach ($listings['jobs'] as $i => $result) {
+            $this->assertEquals($listings['jobs'][$i]['title'], $results->get($i)->title);
+            $this->assertEquals($listings['jobs'][$i]['company'], $results->get($i)->company);
+            $this->assertEquals($listings['jobs'][$i]['location'], $results->get($i)->location);
+            $this->assertEquals($listings['jobs'][$i]['description'], $results->get($i)->description);
+            $this->assertEquals($listings['jobs'][$i]['url'], $results->get($i)->url);
+            $this->assertEquals($keyword, $results->get($i)->query);
+            $this->assertEquals($source, $results->get($i)->source);
+        }
+
+        $this->assertEquals(count($listings['jobs']), $results->count());
+    }
+
+    private function createJobArray($num = 10) {
+        $jobs = [];
+        $i = 0;
+        while ($i < 10) {
+            $jobs[] = [
+                'title' => uniqid(),
+                'company' => uniqid(),
+                'location' => uniqid(),
+                'description' => uniqid(),
+                'url' => uniqid(),
+            ];
+            $i++;
+        }
+        return $jobs;
     }
 }

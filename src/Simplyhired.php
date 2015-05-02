@@ -5,13 +5,6 @@ use JobBrander\Jobs\Client\Job;
 class Simplyhired extends AbstractProvider
 {
     /**
-     * Job provider
-     *
-     * @var string
-     */
-    protected $source = 'Simplyhired';
-
-    /**
      * Developer Key
      *
      * @var string
@@ -71,15 +64,13 @@ class Simplyhired extends AbstractProvider
 
         $job = new Job([
             'title' => $payload['title'],
-            'source' => $this->source,
-            'dates' => $payload['date'],
             'description' => $payload['description'],
             'url' => $payload['url'],
+            'company' => $payload['company'],
+            'location' => $payload['location'],
         ]);
 
-        $job->addCompanies($payload['company'])
-            ->addLocations($payload['location'])
-            ->addCodes($payload['permalink']);
+        $job->addCodes($payload['permalink']);
 
         return $job;
     }
