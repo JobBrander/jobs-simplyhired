@@ -57,7 +57,6 @@ class Simplyhired extends AbstractProvider
             'date',
             'description',
             'url',
-            'permalink',
         ];
 
         $payload = static::parseAttributeDefaults($payload, $defaults);
@@ -69,8 +68,6 @@ class Simplyhired extends AbstractProvider
             'company' => $payload['company'],
             'location' => $payload['location'],
         ]);
-
-        $job->addCodes($payload['permalink']);
 
         return $job;
     }

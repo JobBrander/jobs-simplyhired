@@ -1,6 +1,23 @@
 # Changelog
 All Notable changes to `jobs-simplyhired` will be documented in this file
 
+## 0.3.0 - 2015-05-16
+
+### Added
+- Nothing
+
+### Deprecated
+- Removed permalink from codes as they are deprecated in common
+
+### Fixed
+- Nothing
+
+### Removed
+- Nothing
+
+### Security
+- Nothing
+
 ## 0.2.0 - 2015-05-02
 
 ### Added
