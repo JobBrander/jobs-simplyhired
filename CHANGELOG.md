@@ -1,6 +1,23 @@
 # Changelog
 All Notable changes to `jobs-simplyhired` will be documented in this file
 
+## 0.3.1 - 2015-06-07
+
+### Added
+- Nothing
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Updating tests for guzzle 6.0
+
+### Removed
+- Nothing
+
+### Security
+- Nothing
+
 ## 0.3.0 - 2015-05-16
 
 ### Added

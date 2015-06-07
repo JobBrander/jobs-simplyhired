@@ -5,10 +5,14 @@ use Mockery as m;
 
 class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 {
+    private $clientClass = 'JobBrander\Jobs\Client\Providers\AbstractProvider';
+    private $collectionClass = 'JobBrander\Jobs\Client\Collection';
+    private $jobClass = 'JobBrander\Jobs\Client\Job';
+
     public function setUp()
     {
         $this->params = [
-            'developerKey' => '17a4c65cdfe9ad0e4dd622fe6612df0fc2cadb3c.101238'
+            'developerKey' => 'XXXX'
         ];
         $this->client = new Simplyhired($this->params);
     }
@@ -233,19 +237,35 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($param, $url);
     }
 
+    public function testItCanCreateJobFromPayload()
+    {
+        $payload = $this->createJobArray();
+        $results = $this->client->createJobObject($payload);
+
+        $this->assertEquals($payload['title'], $results->title);
+        $this->assertEquals($payload['description'], $results->description);
+        $this->assertEquals($payload['company'], $results->company);
+        $this->assertEquals($payload['url'], $results->url);
+    }
+
     public function testItCanConnect()
     {
-        $job_count = rand(2,10);
-        $listings = ['jobs' => $this->createJobArray($job_count)];
-        $source = $this->client->getSource();
-        $keyword = 'project manager';
+        $provider = $this->getProviderAttributes();
 
-        $this->client->setKeyword($keyword)
-            ->setCity('Chicago')
-            ->setState('IL');
+        for ($i = 0; $i < $provider['jobs_count']; $i++) {
+            $payload['jobs'][] = $this->createJobArray();
+        }
+
+        $responseBody = json_encode($payload);
+
+        $job = m::mock($this->jobClass);
+        $job->shouldReceive('setQuery')->with($provider['keyword'])
+            ->times($provider['jobs_count'])->andReturnSelf();
+        $job->shouldReceive('setSource')->with($provider['source'])
+            ->times($provider['jobs_count'])->andReturnSelf();
 
         $response = m::mock('GuzzleHttp\Message\Response');
-        $response->shouldReceive($this->client->getFormat())->once()->andReturn($listings);
+        $response->shouldReceive('getBody')->once()->andReturn($responseBody);
 
         $http = m::mock('GuzzleHttp\Client');
         $http->shouldReceive(strtolower($this->client->getVerb()))
@@ -256,32 +276,31 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
         $results = $this->client->getJobs();
 
-        foreach ($listings['jobs'] as $i => $result) {
-            $this->assertEquals($listings['jobs'][$i]['title'], $results->get($i)->title);
-            $this->assertEquals($listings['jobs'][$i]['company'], $results->get($i)->company);
-            $this->assertEquals($listings['jobs'][$i]['location'], $results->get($i)->location);
-            $this->assertEquals($listings['jobs'][$i]['description'], $results->get($i)->description);
-            $this->assertEquals($listings['jobs'][$i]['url'], $results->get($i)->url);
-            $this->assertEquals($keyword, $results->get($i)->query);
-            $this->assertEquals($source, $results->get($i)->source);
-        }
-
-        $this->assertEquals(count($listings['jobs']), $results->count());
+        $this->assertInstanceOf($this->collectionClass, $results);
+        $this->assertCount($provider['jobs_count'], $results);
     }
 
-    private function createJobArray($num = 10) {
-        $jobs = [];
-        $i = 0;
-        while ($i < 10) {
-            $jobs[] = [
-                'title' => uniqid(),
-                'company' => uniqid(),
-                'location' => uniqid(),
-                'description' => uniqid(),
-                'url' => uniqid(),
-            ];
-            $i++;
-        }
-        return $jobs;
+    private function createJobArray() {
+        return [
+            'title' => uniqid(),
+            'company' => uniqid(),
+            'location' => uniqid(),
+            'description' => uniqid(),
+            'url' => uniqid(),
+        ];
+    }
+
+    private function getProviderAttributes($attributes = [])
+    {
+        $defaults = [
+            'path' => uniqid(),
+            'format' => 'json',
+            'keyword' => uniqid(),
+            'source' => uniqid(),
+            'params' => [uniqid()],
+            'jobs_count' => rand(2,10),
+
+        ];
+        return array_replace($defaults, $attributes);
     }
 }
