@@ -7,6 +7,7 @@ All Notable changes to `jobs-simplyhired` will be documented in this file
 - Name attribute
 - DateTime object
 - Hiring organization name
+- City and state via methods
 
 ### Deprecated
 - Nothing
