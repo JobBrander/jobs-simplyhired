@@ -6,6 +6,7 @@ All Notable changes to `jobs-simplyhired` will be documented in this file
 ### Added
 - Name attribute
 - DateTime object
+- Hiring organization name
 
 ### Deprecated
 - Nothing
