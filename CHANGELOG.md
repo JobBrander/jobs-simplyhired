@@ -1,6 +1,24 @@
 # Changelog
 All Notable changes to `jobs-simplyhired` will be documented in this file
 
+## 0.3.3 - 2015-07-25
+
+### Added
+- Name attribute
+- DateTime object
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Removed
+- Nothing
+
+### Security
+- Nothing
+
 ## 0.3.2 - 2015-07-04
 
 ### Added

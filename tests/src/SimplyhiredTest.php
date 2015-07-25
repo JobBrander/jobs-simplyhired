@@ -286,6 +286,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
             'company' => uniqid(),
             'location' => uniqid(),
             'description' => uniqid(),
+            'date' => '2015-07-'.rand(1,31),
             'url' => uniqid(),
         ];
     }
