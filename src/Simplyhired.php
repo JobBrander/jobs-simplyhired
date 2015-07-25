@@ -66,11 +66,11 @@ class Simplyhired extends AbstractProvider
             'name' => $payload['title'],
             'description' => $payload['description'],
             'url' => $payload['url'],
-            'company' => $payload['company'],
             'location' => $payload['location'],
         ]);
 
-        $job->setDatePostedAsString($payload['date']);
+        $job->setDatePostedAsString($payload['date'])
+            ->setCompany($payload['company']);
 
         return $job;
     }
