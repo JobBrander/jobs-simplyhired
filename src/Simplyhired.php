@@ -70,7 +70,7 @@ class Simplyhired extends AbstractProvider
         ]);
 
 
-        $location = $this->parseLocation($payload['location']);
+        $location = static::parseLocation($payload['location']);
 
         $job->setCompany($payload['company'])
             ->setDatePostedAsString($payload['date']);
@@ -248,15 +248,5 @@ class Simplyhired extends AbstractProvider
     public function getVerb()
     {
         return 'GET';
-    }
-
-    /**
-     * Parse city and state from string given by API
-     *
-     * @return array
-     */
-    public function parseLocation($location)
-    {
-        return explode(', ', $location);
     }
 }

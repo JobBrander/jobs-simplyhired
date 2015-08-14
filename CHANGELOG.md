@@ -1,6 +1,23 @@
 # Changelog
 All Notable changes to `jobs-simplyhired` will be documented in this file
 
+## 0.3.4 - 2015-08-14
+
+### Added
+- Nothing
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Updated to v1.0.3 of jobs-common
+
+### Removed
+- parseLocation method
+
+### Security
+- Nothing
+
 ## 0.3.3 - 2015-07-25
 
 ### Added
