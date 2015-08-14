@@ -13,7 +13,7 @@ All Notable changes to `jobs-simplyhired` will be documented in this file
 - Updated to v1.0.3 of jobs-common
 
 ### Removed
-- parseLocation method
+- parseLocation and getParameters methods
 
 ### Security
 - Nothing
