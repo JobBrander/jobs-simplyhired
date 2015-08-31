@@ -7,7 +7,8 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/JobBrander/jobs-simplyhired.svg?style=flat-square)](https://scrutinizer-ci.com/g/JobBrander/jobs-simplyhired)
 [![Total Downloads](https://img.shields.io/packagist/dt/jobbrander/jobs-simplyhired.svg?style=flat-square)](https://packagist.org/packages/jobbrander/jobs-simplyhired)
 
-This package provides Simplyhired Jobs API support for the JobBrander's [Jobs Client](https://github.com/JobBrander/jobs-common).
+This package provides [Simplyhired Jobs API](http://www.simplyhired.com/a/publishers/overview)
+support for the JobBrander's [Jobs Client](https://github.com/JobBrander/jobs-common).
 
 ## Installation
 
@@ -28,10 +29,10 @@ $client = new JobBrander\Jobs\Client\Provider\Simplyhired([
 ]);
 
 // Search for 200 job listings for 'project manager' in Chicago, IL
-$jobs = $client->setKeyword('project manager')
-    ->setCity('Chicago')
-    ->setState('IL')
-    ->setCount(200)
+$jobs = $client->setKeyword('project manager')  // A collection of terms indicating the search criteria
+    ->setCity('Chicago')        // Collection of terms indicating the geographic filter for the results. Location can be a zipcode, state, or city-state combination.
+    ->setState('IL')            //
+    ->setCount(200)             // An integer representing the number of results returned. When available, the XML Results API will return 10 jobs by default. The API is limited to a maximum of 100 results per request.
     ->getJobs();
 ```
 
