@@ -4,40 +4,37 @@ use JobBrander\Jobs\Client\Job;
 
 class Simplyhired extends AbstractProvider
 {
-    /**
-     * Developer Key
-     *
-     * @var string
-     */
-    protected $developerKey;
 
     /**
-     * Client IP Address
+     * Create new Simplyhired jobs client.
      *
-     * @var string
+     * @param array $parameters
      */
-    protected $ipAddress;
+    public function __construct($parameters = [])
+    {
+        parent::__construct($parameters);
+        array_walk($parameters, [$this, 'updateQuery']);
+        // Set default parameters
+        if (!isset($this->ip)) {
+            $this->updateQuery($this->getIpAddress(), 'ip');
+        }
+    }
 
     /**
-     * Configuration Flag
+     * Magic method to handle get and set methods for properties
      *
-     * @var string
-     */
-    protected $configFlag;
-
-    /**
-     * Search Style
+     * @param  string $method
+     * @param  array  $parameters
      *
-     * @var string
+     * @return mixed
      */
-    protected $searchStyle;
-
-    /**
-     * Description Fragment
-     *
-     * @var string
-     */
-    protected $descriptionFrag;
+    public function __call($method, $parameters)
+    {
+        if (isset($this->queryMap[$method], $parameters[0])) {
+            $this->updateQuery($parameters[0], $this->queryMap[$method]);
+        }
+        return parent::__call($method, $parameters);
+    }
 
     /**
      * Returns the standardized job object
@@ -96,16 +93,6 @@ class Simplyhired extends AbstractProvider
     }
 
     /**
-     * Get listings path
-     *
-     * @return  string
-     */
-    public function getListingsPath()
-    {
-        return 'jobs';
-    }
-
-    /**
      * Get IP Address
      *
      * @return  string
@@ -120,61 +107,13 @@ class Simplyhired extends AbstractProvider
     }
 
     /**
-     * Get Search Style
+     * Get listings path
      *
      * @return  string
      */
-    public function getSearchStyle()
+    public function getListingsPath()
     {
-        if (isset($this->searchStyle)) {
-            return $this->searchStyle;
-        } else {
-            return '2';
-        }
-    }
-
-    /**
-     * Get Configuration Flag
-     *
-     * @return  string
-     */
-    public function getConfigFlag()
-    {
-        if (isset($this->configFlag)) {
-            return $this->configFlag;
-        } else {
-            return 'r';
-        }
-    }
-
-    /**
-     * Get Description Fragment
-     *
-     * @return  string
-     */
-    public function getDescriptionFrag()
-    {
-        if (isset($this->descriptionFrag)) {
-            return $this->descriptionFrag;
-        } else {
-            return 0; // By default, show the whole description
-        }
-    }
-
-    /**
-     * Get combined location
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        $location = ($this->city ? $this->city.', ' : null).($this->state ?: null);
-
-        if ($location) {
-            return $location;
-        }
-
-        return null;
+        return 'jobs';
     }
 
     /**
@@ -238,5 +177,21 @@ class Simplyhired extends AbstractProvider
     public function getVerb()
     {
         return 'GET';
+    }
+
+    /**
+     * Attempts to update current query parameters.
+     *
+     * @param  string  $value
+     * @param  string  $key
+     *
+     * @return Simplyhired
+     */
+    protected function updateQuery($value, $key)
+    {
+        if (array_key_exists($key, $this->queryParams)) {
+            $this->queryParams[$key] = $value;
+        }
+        return $this;
     }
 }
