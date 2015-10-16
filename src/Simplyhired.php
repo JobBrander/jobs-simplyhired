@@ -29,6 +29,9 @@ class Simplyhired extends AbstractProvider
         'setFem' => 'fem',
         'setFrl' => 'frl',
         'setFed' => 'fed',
+        'setKeyword' => 'q',
+        'setLocation' => 'l',
+        'setCount' => 'ws',
     ];
 
     /**
@@ -184,15 +187,15 @@ class Simplyhired extends AbstractProvider
         $url_string = $sep = '';
 
         array_walk($this->urlParams, function ($value, $key) use (&$url_string, &$sep) {
-            $computed_value = $this->$value();
+            $computed_value = $value;
             if (!is_null($computed_value)) {
                 $url_string .= $sep . $key . '-' . urlencode($computed_value);
                 $sep = '/';
             }
         });
 
-        array_walk($queryParams, function ($value, $key) use (&$query_string) {
-            $computed_value = $this->$value();
+        array_walk($this->queryParams, function ($value, $key) use (&$query_string) {
+            $computed_value = $value;
             if (!is_null($computed_value)) {
                 $query_string[$key] = $computed_value;
             }
@@ -234,6 +237,9 @@ class Simplyhired extends AbstractProvider
     {
         if (array_key_exists($key, $this->queryParams)) {
             $this->queryParams[$key] = $value;
+        }
+        if (array_key_exists($key, $this->urlParams)) {
+            $this->urlParams[$key] = $value;
         }
         return $this;
     }
