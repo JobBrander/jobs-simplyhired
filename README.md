@@ -31,7 +31,27 @@ $client = new JobBrander\Jobs\Client\Provider\Simplyhired([
 
 // Search for 200 job listings for 'project manager' in Chicago, IL
 $jobs = $client
-    // SimplyHired API Setters
+    // SimplyHired API path Setters
+    ->setQ()        // Query
+    ->setL()        // Location
+    ->setMi()       // Miles (optional)
+    ->setSb()       // Sort by (optional)
+    ->setWs()       // Window Size (optional)
+    ->setPn()       // Page Number (optional)
+    ->setSi()       // Start index (optional)
+    ->setFdb()      // Date Posted (optional)
+    ->setFjt()      // Job type (optional)
+    ->setFsr()      // Job source (optional)
+    ->setFem()      // Employer (optional)
+    ->setFrl()      // Special filters (optional)
+    ->setFed()      // Education requirements (optional)
+    // SimplyHired API query setters
+    ->setPshid()    // Publisher id (required)
+    ->setAuth()     // Authentication Key (required)
+    ->setSsty()     // Search style (required)
+    ->setCflg()     // Configuration flag (required)
+    ->setClip()     // Client IP (required)
+    ->setFrag()     // Description fragment, defaults to display clip, not whole description (optional)
     // More
     ->setKeyword('project manager') //
     ->setLocation('Chicago, IL')    //
