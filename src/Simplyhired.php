@@ -5,39 +5,100 @@ use JobBrander\Jobs\Client\Job;
 class Simplyhired extends AbstractProvider
 {
     /**
-     * Developer Key
+     * Map of setter methods to query parameters
      *
-     * @var string
+     * @var array
      */
-    protected $developerKey;
+    protected $queryMap = [
+        'setPshid' => 'pshid',
+        'setAuth' => 'auth',
+        'setSsty' => 'ssty',
+        'setCflg' => 'cflg',
+        'setClip' => 'clip',
+        'setFrag' => 'frag',
+        'setQ' => 'q',
+        'setL' => 'l',
+        'setMi' => 'mi',
+        'setSb' => 'sb',
+        'setWs' => 'ws',
+        'setPn' => 'pn',
+        'setSi' => 'si',
+        'setFdb' => 'fdb',
+        'setFjt' => 'fjt',
+        'setFsr' => 'fsr',
+        'setFem' => 'fem',
+        'setFrl' => 'frl',
+        'setFed' => 'fed',
+        'setKeyword' => 'q',
+        'setLocation' => 'l',
+        'setCount' => 'ws',
+    ];
 
     /**
-     * Client IP Address
+     * Current api query parameters
      *
-     * @var string
+     * @var array
      */
-    protected $ipAddress;
+    protected $queryParams = [
+        'pshid' => null,
+        'auth' => null,
+        'ssty' => null,
+        'cflg' => null,
+        'clip' => null,
+        'frag' => null,
+    ];
 
     /**
-     * Configuration Flag
+     * Current api URL path parameters
      *
-     * @var string
+     * @var array
      */
-    protected $configFlag;
+    protected $urlParams = [
+        'q' => null,
+        'l' => null,
+        'mi' => null,
+        'sb' => null,
+        'ws' => null,
+        'pn' => null,
+        'si' => null,
+        'fdb' => null,
+        'fjt' => null,
+        'fsr' => null,
+        'fem' => null,
+        'frl' => null,
+        'fed' => null,
+    ];
 
     /**
-     * Search Style
+     * Create new Simplyhired jobs client.
      *
-     * @var string
+     * @param array $parameters
      */
-    protected $searchStyle;
+    public function __construct($parameters = [])
+    {
+        parent::__construct($parameters);
+        array_walk($parameters, [$this, 'updateQuery']);
+        // Set default parameters
+        if (!isset($parameters['clip'])) {
+            $this->updateQuery($this->getIpAddress(), 'clip');
+        }
+    }
 
     /**
-     * Description Fragment
+     * Magic method to handle get and set methods for properties
      *
-     * @var string
+     * @param  string $method
+     * @param  array  $parameters
+     *
+     * @return mixed
      */
-    protected $descriptionFrag;
+    public function __call($method, $parameters)
+    {
+        if (isset($this->queryMap[$method], $parameters[0])) {
+            $this->updateQuery($parameters[0], $this->queryMap[$method]);
+        }
+        return parent::__call($method, $parameters);
+    }
 
     /**
      * Returns the standardized job object
@@ -96,6 +157,16 @@ class Simplyhired extends AbstractProvider
     }
 
     /**
+     * Get IP Address
+     *
+     * @return  string
+     */
+    public function getIpAddress()
+    {
+        return getHostByName(getHostName());
+    }
+
+    /**
      * Get listings path
      *
      * @return  string
@@ -106,111 +177,25 @@ class Simplyhired extends AbstractProvider
     }
 
     /**
-     * Get IP Address
-     *
-     * @return  string
-     */
-    public function getIpAddress()
-    {
-        if (isset($this->ipAddress)) {
-            return $this->ipAddress;
-        } else {
-            return getHostByName(getHostName());
-        }
-    }
-
-    /**
-     * Get Search Style
-     *
-     * @return  string
-     */
-    public function getSearchStyle()
-    {
-        if (isset($this->searchStyle)) {
-            return $this->searchStyle;
-        } else {
-            return '2';
-        }
-    }
-
-    /**
-     * Get Configuration Flag
-     *
-     * @return  string
-     */
-    public function getConfigFlag()
-    {
-        if (isset($this->configFlag)) {
-            return $this->configFlag;
-        } else {
-            return 'r';
-        }
-    }
-
-    /**
-     * Get Description Fragment
-     *
-     * @return  string
-     */
-    public function getDescriptionFrag()
-    {
-        if (isset($this->descriptionFrag)) {
-            return $this->descriptionFrag;
-        } else {
-            return 0; // By default, show the whole description
-        }
-    }
-
-    /**
-     * Get combined location
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        $location = ($this->city ? $this->city.', ' : null).($this->state ?: null);
-
-        if ($location) {
-            return $location;
-        }
-
-        return null;
-    }
-
-    /**
      * Get query string for client based on properties
      *
      * @return string
      */
     public function getQueryString()
     {
-        $url_params = [
-            'q' => 'getKeyword',
-            'l' => 'getLocation',
-            'ws' => 'getCount',
-            'pn' => 'getPage',
-        ];
-        $query_params = [
-            'auth' => 'getDeveloperKey',
-            'clip' => 'getIpAddress',
-            'ssty' => 'getSearchStyle',
-            'cflg' => 'getConfigFlag',
-            'frag' => 'getDescriptionFrag',
-        ];
-
         $query_string = [];
-
         $url_string = $sep = '';
-        array_walk($url_params, function ($value, $key) use (&$url_string, &$sep) {
-            $computed_value = $this->$value();
+
+        array_walk($this->urlParams, function ($value, $key) use (&$url_string, &$sep) {
+            $computed_value = $value;
             if (!is_null($computed_value)) {
                 $url_string .= $sep . $key . '-' . urlencode($computed_value);
                 $sep = '/';
             }
         });
 
-        array_walk($query_params, function ($value, $key) use (&$query_string) {
-            $computed_value = $this->$value();
+        array_walk($this->queryParams, function ($value, $key) use (&$query_string) {
+            $computed_value = $value;
             if (!is_null($computed_value)) {
                 $query_string[$key] = $computed_value;
             }
@@ -238,5 +223,24 @@ class Simplyhired extends AbstractProvider
     public function getVerb()
     {
         return 'GET';
+    }
+
+    /**
+     * Attempts to update current query parameters.
+     *
+     * @param  string  $value
+     * @param  string  $key
+     *
+     * @return Simplyhired
+     */
+    protected function updateQuery($value, $key)
+    {
+        if (array_key_exists($key, $this->queryParams)) {
+            $this->queryParams[$key] = $value;
+        }
+        if (array_key_exists($key, $this->urlParams)) {
+            $this->urlParams[$key] = $value;
+        }
+        return $this;
     }
 }

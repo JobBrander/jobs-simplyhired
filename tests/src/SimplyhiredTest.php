@@ -12,7 +12,8 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->params = [
-            'developerKey' => 'XXXX'
+            'auth' => uniqid(),
+            'pshid' => uniqid()
         ];
         $this->client = new Simplyhired($this->params);
     }
@@ -71,7 +72,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $state = uniqid();
         $param = 'l-'.urlencode($city.', '.$state);
 
-        $url = $this->client->setCity($city)->setState($state)->getUrl();
+        $url = $this->client->setLocation($city.', '.$state)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -81,7 +82,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $city = uniqid();
         $param = 'l-'.urlencode($city);
 
-        $url = $this->client->setCity($city)->getUrl();
+        $url = $this->client->setLocation($city)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -91,7 +92,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $state = uniqid();
         $param = 'l-'.urlencode($state);
 
-        $url = $this->client->setState($state)->getUrl();
+        $url = $this->client->setLocation($state)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -126,20 +127,11 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlIncludesDeveloperKeyWhenProvided()
     {
-        $param = 'auth='.$this->params['developerKey'];
+        $param = 'auth='.$this->params['auth'];
 
         $url = $this->client->getUrl();
 
         $this->assertContains($param, $url);
-    }
-
-    public function testUrlNotIncludesDeveloperKeyWhenNotProvided()
-    {
-        $param = 'auth=';
-
-        $url = $this->client->setDeveloperKey(null)->getUrl();
-
-        $this->assertNotContains($param, $url);
     }
 
     public function testUrlIncludesPageWhenProvided()
@@ -147,7 +139,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $page = uniqid();
         $param = 'pn-'.$page;
 
-        $url = $this->client->setPage($page)->getUrl();
+        $url = $this->client->setPn($page)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -156,7 +148,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     {
         $param = 'pn-';
 
-        $url = $this->client->setPage(null)->getUrl();
+        $url = $this->client->setPn(null)->getUrl();
 
         $this->assertNotContains($param, $url);
     }
@@ -166,7 +158,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $ip = uniqid();
         $param = 'clip='.$ip;
 
-        $url = $this->client->setIpAddress($ip)->getUrl();
+        $url = $this->client->setClip($ip)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -175,7 +167,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     {
         $param = 'clip=';
 
-        $url = $this->client->setIpAddress(null)->getUrl();
+        $url = $this->client->setClip(null)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -185,7 +177,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $ssty = uniqid();
         $param = 'ssty='.$ssty;
 
-        $url = $this->client->setSearchStyle($ssty)->getUrl();
+        $url = $this->client->setSsty($ssty)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -194,9 +186,9 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     {
         $param = 'ssty=';
 
-        $url = $this->client->setSearchStyle(null)->getUrl();
+        $url = $this->client->setSsty(null)->getUrl();
 
-        $this->assertContains($param, $url);
+        $this->assertNotContains($param, $url);
     }
 
     public function testUrlIncludesConfigFlagWhenProvided()
@@ -204,7 +196,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $cflg = uniqid();
         $param = 'cflg='.$cflg;
 
-        $url = $this->client->setConfigFlag($cflg)->getUrl();
+        $url = $this->client->setCflg($cflg)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -213,9 +205,9 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     {
         $param = 'cflg=';
 
-        $url = $this->client->setConfigFlag(null)->getUrl();
+        $url = $this->client->setCflg(null)->getUrl();
 
-        $this->assertContains($param, $url);
+        $this->assertNotContains($param, $url);
     }
 
     public function testUrlIncludesDescriptionFragWhenProvided()
@@ -223,7 +215,7 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
         $frag = uniqid();
         $param = 'frag='.$frag;
 
-        $url = $this->client->setDescriptionFrag($frag)->getUrl();
+        $url = $this->client->setFrag($frag)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -232,9 +224,9 @@ class SimplyhiredTest extends \PHPUnit_Framework_TestCase
     {
         $param = 'frag=';
 
-        $url = $this->client->setDescriptionFrag(null)->getUrl();
+        $url = $this->client->setFrag(null)->getUrl();
 
-        $this->assertContains($param, $url);
+        $this->assertNotContains($param, $url);
     }
 
     public function testItCanCreateJobFromPayload()

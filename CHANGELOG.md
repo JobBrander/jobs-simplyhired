@@ -1,6 +1,25 @@
 # Changelog
 All Notable changes to `jobs-simplyhired` will be documented in this file
 
+## 0.4.0 - 2015-10-15
+
+### Added
+- Support for all setters in API
+- Readme documentation for all supported methods
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Sorting methods alphabetically
+- Travis-ci support for PHP 7.0 and HHVM
+
+### Removed
+- setCity and setState methods not supported by official API
+
+### Security
+- Nothing
+
 ## 0.3.4 - 2015-08-14
 
 ### Added
